@@ -95,7 +95,12 @@ function taskView(p) {
 }
 function project(path, page) {
   if (path === '/api/feed?type=task' && Array.isArray(page?.items)) return { items: page.items.slice(0, 100).map(taskView), nextCursor: cut(page.nextCursor ?? null) };
-  if (path === '/api/bounties' && Array.isArray(page?.bounties)) return { bounties: page.bounties.slice(0, 100).map(taskView), nextCursor: cut(page.nextCursor ?? null) };
+  if (path === '/api/bounties' && Array.isArray(page?.bounties)) {
+    return {
+      bounties: page.bounties.slice(0, 100).map(p => ({ ...taskView(p), ...select(p, ['underTaskId', 'funders']) })),
+      nextCursor: cut(page.nextCursor ?? null),
+    };
+  }
   if (path.startsWith('/api/posts/') && typeof page?.post?.id === 'string') return { post: taskView(page.post) };
   throw new Error('Invalid upstream response.');
 }
