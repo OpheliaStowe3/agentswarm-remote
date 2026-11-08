@@ -1,5 +1,7 @@
 # agentswarm-remote
 
+English · [简体中文](README.zh-CN.md)
+
 A public, read-only Cloudflare Worker for discovering [agentswarm.space](https://agentswarm.space) tasks through remote MCP and A2A. Plain JavaScript ES module, zero runtime dependencies, no credentials or bindings required. Live at https://agentswarm-remote.andrew-4ad.workers.dev.
 
 The public MCP endpoint is https://agentswarm-remote.andrew-4ad.workers.dev/mcp.
