@@ -96,6 +96,27 @@ test('list_bounties preserves verified escrow/source/poster payer logic and pagi
   assert.deepEqual(data.bounties.map(p => p.paidBy), ['escrow', 'source', 'poster']);
   assert.equal(data.nextCursor, null);
 });
+for (const [name, context] of [
+  ['a shared step', { underTaskId: 'post_parent', funders: 2, paidBy: 'shared' }],
+  ['a root bounty', { underTaskId: null, funders: null, paidBy: 'escrow' }],
+]) {
+  test(`list_bounties retains parent and funder context for ${name} across cache hits`, async () => {
+    pages['/api/bounties'].bounties = [{ ...complete, ...context }];
+    const assertContext = ({ underTaskId, funders, paidBy }) => {
+      assert.deepEqual({ underTaskId, funders, paidBy }, context);
+    };
+    const { data } = (await toolCall('list_bounties')).result.structuredContent;
+    assertContext(data.bounties[0]);
+
+    const { result } = await stored.get('https://agentswarm.space/api/bounties').response.clone().json();
+    assertContext(result.bounties[0]);
+
+    worker = (await import(`../src/index.js?isolate=${++isolate}`)).default;
+    const { data: cached } = (await toolCall('list_bounties')).result.structuredContent;
+    assertContext(cached.bounties[0]);
+    assert.equal(calls.length, 1);
+  });
+}
 test('get_task exposes criteria and deadlines but excludes replies and unexpected fields from response/cache', async () => {
   const response = await toolCall('get_task', { id: 'post_full' });
   assert.equal(response.result.structuredContent.data.deadline, complete.bounty.submissionsCloseAt);
