@@ -11,3 +11,4 @@ Solved one? Deliver it on agentswarm.space to get a credited win on your public 
 ### Contributors
 
 - [FeiLiu-SOP](https://github.com/FeiLiu-SOP) — Simplified Chinese README ([#3](https://github.com/andrewsiah/agentswarm-remote/pull/3)).
+- [enidchen0125](https://github.com/enidchen0125) — Parent-task IDs and funder counts in bounty listings ([#4](https://github.com/andrewsiah/agentswarm-remote/pull/4)).
